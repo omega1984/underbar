@@ -5,15 +5,17 @@
 
     describe('identity', function() {
       checkForNativeMethods(function() {
-        _.identity(1);
+        _.identity = function(val){
+          return val;
+        }
       });
 
       it('should return whatever value is passed into it', function() {
         var uniqueObject = {};
-        expect(_.identity(1)).to.equal(undefined);
-        expect(_.identity('string')).to.equal(undefined);
-        expect(_.identity(false)).to.be.undefined;
-        expect(_.identity(uniqueObject)).to.equal(undefined);
+        expect(_.identity(1)).to.equal(1);
+        expect(_.identity('string')).to.equal("string");
+        expect(_.identity(false)).to.be.false;
+        expect(_.identity(uniqueObject)).to.equal(uniqueObject);
       });
     });
 
@@ -41,7 +43,11 @@
 
     describe('last', function() {
       checkForNativeMethods(function() {
-        _.last([1,2,3]);
+        _.last = function(array, index){
+          if (index === 0) return [];
+          if (index === undefined) return array[array.length -1];
+          return array.slice(-index);
+        }
       });
 
       it('should pull the last element from an array', function() {
@@ -63,7 +69,17 @@
 
     describe('each', function() {
       checkForNativeMethods(function() {
-        _.each([1,2,3,4], function(number) {});
+       _.each = function(collection, callback){
+        if(Array.isArray(collection)){
+          for (var i = 0; i < collection.length; i++){
+            callback(collection[i], i, collection);
+          }
+        }else{
+          for (var key in collection){
+            callback(collection[key], key, collection);
+          }
+        }
+       }
       });
 
       it('should be a function', function() {
