@@ -73,7 +73,18 @@
       };
 
       checkForNativeMethods(function() {
-        _.every([4, 5, 6], _.identity);
+        _.every = function(collection, callback){
+          if (callback === undefined){
+            callback = _.identity;
+          }
+          var result = true;
+          _.each(collection, function(item){
+            if (!callback(item)){
+              result = false;
+            }
+          });
+          return result;
+        }
       });
 
       it('passes by default for an empty collection', function() {
