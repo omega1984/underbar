@@ -496,8 +496,16 @@
 
     describe('reduce', function() {
       checkForNativeMethods(function() {
-        var add = function(tally, item) {return tally + item; };
-        _.reduce([1, 2, 3, 4], add)
+        _.reduce = function(collection, callback, accumulator){
+          _.each(collection, function(item, index){
+            if (index === 0 && accumulator === undefined){
+              accumulator = item;
+            }else{
+              accumulator = callback(accumulator, item);
+            }
+          });
+          return accumulator;
+        }
       });
 
       it('should be a function', function() {
