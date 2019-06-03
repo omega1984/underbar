@@ -264,8 +264,15 @@
 
     describe('filter', function() {
       checkForNativeMethods(function() {
-        var isEven = function(num) { return num % 2 === 0; };
-        _.filter([1, 2, 3, 4], isEven)
+        _.filter = function(collection, callback){
+          var newArray = [];
+          for (var i = 0; i < collection.length; i++){
+            if (callback(collection[i])){
+              newArray.push(collection[i]);
+            }
+          }
+          return newArray;
+        }
       });
 
       it('should return all even numbers in an array', function() {
@@ -293,8 +300,15 @@
 
     describe('reject', function() {
       checkForNativeMethods(function() {
-        var isEven = function(num) { return num % 2 === 0; };
-        _.reject([1, 2, 3, 4, 5, 6], isEven)
+        _.reject = function(collection, callback){
+          var newArray = [];
+          for (var i = 0; i < collection.length; i++){
+            if (!callback(collection[i])){
+              newArray.push(collection[i]);
+            }
+          }
+          return newArray;
+        }
       });
 
       it('should reject all even numbers', function() {
@@ -321,6 +335,23 @@
     });
 
     describe('uniq', function() {
+      checkForNativeMethods(function(){
+        _.uniq = function(collection, callback){
+          if (typeof callback !== "function"){
+            callback = _.identity;
+          }
+          var result = [];
+          var obj = {};
+          for (var i = 0; i < collection.length; i++){
+            var item = collection[i];
+            if (!obj[callback(item)]){
+              obj[callback(item)] = item;
+              result.push(item);
+            }
+          }
+          return result;
+        }
+      });
 
       it('should not mutate the input array', function() {
         var input = [1, 2, 3, 4, 5];
@@ -362,7 +393,7 @@
         var iterator = function(value) { return value === 1; };
         var numbers = [1, 2, 2, 3, 4, 4];
 
-        expect(_.uniq(FILL_ME_IN)).to.eql([1, 2]);
+        expect(_.uniq(numbers, iterator)).to.eql([1, 2]);
       });
 
       it('should produce a brand new array instead of modifying the input array', function() {
@@ -375,9 +406,13 @@
 
     describe('map', function() {
       checkForNativeMethods(function() {
-        _.map([1, 2, 3, 4], function(num) {
-          return num * 2;
-        })
+        _.map = function(collection, callback){
+          var newArray = [];
+          _.each(collection, function(item, index, array){
+            newArray.push(callback(item, index, array));
+          });
+          return newArray;
+        }
       });
 
       it('should not mutate the input array', function() {
