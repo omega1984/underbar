@@ -131,7 +131,18 @@
       };
 
       checkForNativeMethods(function() {
-        _.some([4, 5, 6], _.identity);
+        _.some = function(collection, callback){
+          if (callback === undefined){
+            callback = _.identity;
+          }
+          var result = false;
+          _.each(collection, function(item){
+            if (callback(item)){
+              result = true;
+            }
+          });
+          return result;
+        }
       });
 
       it('should fail by default for an empty collection', function() {
@@ -176,7 +187,15 @@
 
     describe('extend', function() {
       checkForNativeMethods(function() {
-        _.extend({ a: 1 },{ b: 1 }, { c: 1 });
+        _.extend = function(object){
+          var sourceArray = [].slice.call(arguments, 1);
+          _.each(sourceArray, function(obj){
+            for(var key in obj){
+              object[key] = obj[key];
+            }
+          });
+          return object;
+        }
       });
 
       it('returns the first argument', function() {
