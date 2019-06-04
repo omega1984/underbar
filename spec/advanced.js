@@ -134,7 +134,17 @@
 
     describe('zip', function() {
       checkForNativeMethods(function() {
-        _.zip(['moe', 'larry', 'curly'], [30, 40, 50], [true])
+        _.zip = function(){
+          var args = [...arguments];
+          var maxLen = args.sort((a, b) => b.length - a.length)[0].length;
+          var arr = Array.from({length: args.length}, () => []);
+          for (var i = 0; i < arr.length; i++){
+            for (var j = 0; j < maxLen; j++){
+              arr[j].push(args[i][j]);
+            }
+          }
+          return arr;
+        }
       });
 
       it('should zip together arrays of different lengths', function() {
