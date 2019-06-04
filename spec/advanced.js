@@ -160,7 +160,29 @@
 
     describe('intersection', function() {
       checkForNativeMethods(function() {
-        _.intersection(['moe', 'curly', 'larry'], ['moe', 'groucho'])
+        _.intersection = function(){
+          var args = [...arguments];
+          var maxLen = args.sort((a, b) => b.length - a.length)[0].length;
+          var holder = {};
+          var result = [];
+          for (var i = 0; i < args.length; i++){
+            for (var j = 0; j < maxLen; j++){
+              if (args[i][j] !== undefined){
+                if(holder[args[i][j]]){
+                  holder[args[i][j]] += 1;
+                }else{
+                  holder[args[i][j]] = 1;
+                }
+              }
+            }
+          }
+          for (var key in holder){
+            if (holder[key] > 1){
+              result.push(key);
+            }
+          }
+          return result;
+        }
       });
 
       it('should take the set intersection of two arrays', function() {
@@ -174,7 +196,18 @@
 
     describe('difference', function() {
       checkForNativeMethods(function() {
-        _.difference([1,2,3], [2,30,40])
+        _.difference = function(){
+          var args = [...arguments];
+          for (var i = 1; i < args.length; i++){
+            for (var j = 0; j < args[0].length; j++){
+              if (args[i].includes(args[0][j])){
+                args[0].splice(j, 1);
+                j--;
+              }
+            }
+          }
+          return args[0];
+        }
       });
 
       it('should return the difference between two arrays', function() {
@@ -199,7 +232,20 @@
       });
 
       checkForNativeMethods(function() {
-        _.throttle(callback, 100)
+        _.throttle = function(callback, wait){
+          var throttling;
+
+          return function(){
+            var args = arguments;
+            if(!throttling){
+              callback.apply(this, args);
+              throttling = true;
+              setTimeout(function(){
+                throttling = false;
+              }, wait);
+            }
+          }
+        }
       });
 
       it('should return a function callable twice in the first 200ms', function() {
