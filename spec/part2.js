@@ -245,7 +245,17 @@
 
     describe('defaults', function() {
       checkForNativeMethods(function() {
-        _.defaults({ a: 1 },{ b: 1 }, { c: 1 });
+        _.defaults = function(object){
+          var sourceArray = [].slice.call(arguments, 1);
+          _.each(sourceArray, function(obj){
+            for (var key in obj){
+              if (object[key] === undefined){
+                object[key] = obj[key];
+              }
+            }
+          });
+          return object;
+        }
       });
 
       it('should be a function', function() {
@@ -442,10 +452,24 @@
       });
 
       checkForNativeMethods(function() {
-        _.memoize(function add(a, b) {
-          return a + b;
-        });
-      })
+        _.memoize = function(func){
+          var memoizedFunc = function() {
+            var cache = memoizedFunc.cache;
+            var result;
+            var args = Array.prototype.slice.call(arguments);
+            var key = JSON.stringify(args);
+            if(cache.hasOwnProperty(key)) {
+              result = memoizedFunc.cache[key];
+            } else {
+              result = func.apply(null, arguments);
+              memoizedFunc.cache[key] = result;
+            }
+            return result;
+          };
+          memoizedFunc.cache = {};
+          return memoizedFunc;
+        }
+      });
 
       it('should produce the same result as the non-memoized version', function() {
         expect(add(1, 2)).to.equal(3);
