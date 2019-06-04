@@ -452,23 +452,16 @@
       });
 
       checkForNativeMethods(function() {
-        _.memoize = function(func){
-          var memoizedFunc = function() {
-            var cache = memoizedFunc.cache;
-            var result;
-            var args = Array.prototype.slice.call(arguments);
-            var key = JSON.stringify(args);
-            if(cache.hasOwnProperty(key)) {
-              result = memoizedFunc.cache[key];
-            } else {
-              result = func.apply(null, arguments);
-              memoizedFunc.cache[key] = result;
+        _.memoize = function(func) {
+          var checkup = {};
+          return function () {
+            var key = JSON.stringify(arguments);
+            if (checkup[key] === undefined){
+              checkup[key] = func.apply(func, arguments);
             }
-            return result;
+            return checkup[key];
           };
-          memoizedFunc.cache = {};
-          return memoizedFunc;
-        }
+        };
       });
 
       it('should produce the same result as the non-memoized version', function() {
