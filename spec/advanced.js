@@ -5,8 +5,17 @@
 
     describe('invoke, when provided a function reference', function() {
       checkForNativeMethods(function() {
-        _.invoke(['dog', 'cat'], _.identity);
-      })
+        _.invoke = function(collection, method, args){
+          if(typeof method === 'function'){
+            return _.map(collection, function(item){
+              return method.apply(item);
+            });
+          }
+          return _.map(collection, function(item){
+              return item[method].apply(item);
+          });
+        }
+      });
 
       it('runs the input function on each item in the array, and returns a list of results', function() {
         var reverse = function(){
