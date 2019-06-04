@@ -452,12 +452,12 @@
       });
 
       checkForNativeMethods(function() {
-        _.memoize = function(func) {
+        _.memoize = function(callback) {
           var checkup = {};
           return function () {
             var key = JSON.stringify(arguments);
             if (checkup[key] === undefined){
-              checkup[key] = func.apply(func, arguments);
+              checkup[key] = callback.apply(callback, arguments);  // arguments is an array
             }
             return checkup[key];
           };
@@ -519,7 +519,12 @@
       })
 
       checkForNativeMethods(function() {
-        _.delay(callback, 100);
+        _.delay = function(callback, time){
+          var args = [].slice.call(arguments, 2); //arguments is an array of arguments
+          setTimeout(function(){
+            callback.apply(callback, args);
+          }, time);
+        }
       })
 
       it('should only execute the function after the specified wait time', function() {
@@ -543,7 +548,14 @@
 
     describe('shuffle', function() {
       checkForNativeMethods(function() {
-        _.shuffle([1, 2, 3, 4])
+        _.shuffle = function(collection){
+          var array = collection.slice(0);
+          for (var i = 0; i < array.length; i++){
+            var randomIndex = Math.floor(Math.random()*array.length);
+            [array[i], array[randomIndex]] = [array[randomIndex], array[i]];
+          }
+          return array
+        }
       })
 
       it('should not modify the original object', function() {
