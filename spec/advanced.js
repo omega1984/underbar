@@ -5,13 +5,15 @@
 
     describe('invoke, when provided a function reference', function() {
       checkForNativeMethods(function() {
-        _.invoke = function(collection, method, args){
+        _.invoke = function(collection, method){
           if(typeof method === 'function'){
             return _.map(collection, function(item){
               return method.apply(item);
             });
           }
           return _.map(collection, function(item){
+              // equivalent to: item.method();
+              // item.toUpperCase();
               return item[method].apply(item);
           });
         }
@@ -43,9 +45,13 @@
 
     describe('sortBy', function() {
       checkForNativeMethods(function() {
-        _.sortBy([{name : 'curly', age : 50}, {name : 'moe', age : 30}], function(person) {
-          return person.age;
-        });
+        _.sortBy = function(collection, method){
+          if (typeof method === "function"){
+            return collection.sort((a, b) => method(a) - method(b));
+          }else{
+            return collection.sort((a, b) => a[method] - b[method]);
+          }
+        }
       });
 
       it('should sort by age', function() {
@@ -99,7 +105,24 @@
 
     describe('flatten', function() {
       checkForNativeMethods(function() {
-        _.flatten([1, [2], [3, [[[4]]]]])
+        _.flatten = function(collection){
+          var keepGoing = true;
+          while (keepGoing === true){
+            var count = 0;
+            collection = _.reduce(collection, function(a, b){
+              return a.concat(b);
+            }, []);
+            _.each(collection, function(item){
+              if (Array.isArray(item)){
+                count++;
+              }
+            });
+            if (count === 0){
+              keepGoing = false;
+            }
+          }
+          return collection;
+        }
       });
 
       it('can flatten nested arrays', function() {
