@@ -5,18 +5,7 @@
 
     describe('invoke, when provided a function reference', function() {
       checkForNativeMethods(function() {
-        _.invoke = function(collection, method){
-          if(typeof method === 'function'){
-            return _.map(collection, function(item){
-              return method.apply(item);
-            });
-          }
-          return _.map(collection, function(item){
-              // equivalent to: item.method();
-              // item.toUpperCase();
-              return item[method].apply(item);
-          });
-        }
+        
       });
 
       it('runs the input function on each item in the array, and returns a list of results', function() {
@@ -45,13 +34,7 @@
 
     describe('sortBy', function() {
       checkForNativeMethods(function() {
-        _.sortBy = function(collection, method){
-          if (typeof method === "function"){
-            return collection.sort((a, b) => method(a) - method(b));
-          }else{
-            return collection.sort((a, b) => a[method] - b[method]);
-          }
-        }
+        
       });
 
       it('should sort by age', function() {
@@ -105,24 +88,7 @@
 
     describe('flatten', function() {
       checkForNativeMethods(function() {
-        _.flatten = function(collection){
-          var keepGoing = true;
-          while (keepGoing === true){
-            var count = 0;
-            collection = _.reduce(collection, function(a, b){
-              return a.concat(b);
-            }, []);
-            _.each(collection, function(item){
-              if (Array.isArray(item)){
-                count++;
-              }
-            });
-            if (count === 0){
-              keepGoing = false;
-            }
-          }
-          return collection;
-        }
+        
       });
 
       it('can flatten nested arrays', function() {
@@ -134,17 +100,7 @@
 
     describe('zip', function() {
       checkForNativeMethods(function() {
-        _.zip = function(){
-          var args = [...arguments];
-          var maxLen = args.sort((a, b) => b.length - a.length)[0].length;
-          var arr = Array.from({length: args.length}, () => []);
-          for (var i = 0; i < arr.length; i++){
-            for (var j = 0; j < maxLen; j++){
-              arr[j].push(args[i][j]);
-            }
-          }
-          return arr;
-        }
+        
       });
 
       it('should zip together arrays of different lengths', function() {
@@ -160,48 +116,7 @@
 
     describe('intersection', function() {
       checkForNativeMethods(function() {
-        // _.intersection = function(){
-        //   var args = [...arguments];
-        //   var maxLen = args.sort((a, b) => b.length - a.length)[0].length;
-        //   var holder = {};
-        //   var result = [];
-        //   for (var i = 0; i < args.length; i++){
-        //     for (var j = 0; j < maxLen; j++){
-        //       if (args[i][j] !== undefined){
-        //         if(holder[args[i][j]]){
-        //           holder[args[i][j]] += 1;
-        //         }else{
-        //           holder[args[i][j]] = 1;
-        //         }
-        //       }
-        //     }
-        //   }
-        //   for (var key in holder){
-        //     if (holder[key] >= args.length){
-        //       result.push(key);
-        //     }
-        //   }
-        //   return result;
-        // }
-        // better version that works for all cases
-        _.intersection = function() {
-          var list = [...arguments];
-          return list.reduce(function(a, b) {
-            return compare(a, b);
-          });
-        }
-        function compare(array1, array2) {
-          var result = [];
-          for (var i = 0; i < array1.length; i++) {
-            for (var j = 0; j < array2.length; j++) {
-              if (array2[j] === array1[i]){
-                result.push(array2[j]);
-                array2.splice(j, 1);
-              }
-            }
-          }
-          return result;
-        }
+       
       });
 
       it('should take the set intersection of two arrays', function() {
@@ -215,18 +130,7 @@
 
     describe('difference', function() {
       checkForNativeMethods(function() {
-        _.difference = function(){
-          var args = [...arguments];
-          for (var i = 1; i < args.length; i++){
-            for (var j = 0; j < args[0].length; j++){
-              if (args[i].includes(args[0][j])){
-                args[0].splice(j, 1);
-                j--;
-              }
-            }
-          }
-          return args[0];
-        }
+        
       });
 
       it('should return the difference between two arrays', function() {
@@ -251,20 +155,7 @@
       });
 
       checkForNativeMethods(function() {
-        _.throttle = function(callback, wait){
-          var throttling;
-
-          return function(){
-            var args = arguments;
-            if(!throttling){
-              callback.apply(this, args);
-              throttling = true;
-              setTimeout(function(){
-                throttling = false;
-              }, wait);
-            }
-          }
-        }
+        
       });
 
       it('should return a function callable twice in the first 200ms', function() {

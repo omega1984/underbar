@@ -5,9 +5,7 @@
 
     describe('identity', function() {
       checkForNativeMethods(function() {
-        _.identity = function(val){
-          return val;
-        }
+
       });
 
       it('should return whatever value is passed into it', function() {
@@ -43,11 +41,7 @@
 
     describe('last', function() {
       checkForNativeMethods(function() {
-        _.last = function(array, index){
-          if (index === 0) return [];
-          if (index === undefined) return array[array.length -1];
-          return array.slice(-index);
-        }
+        
       });
 
       it('should pull the last element from an array', function() {
@@ -69,17 +63,7 @@
 
     describe('each', function() {
       checkForNativeMethods(function() {
-       _.each = function(collection, callback){
-        if(Array.isArray(collection)){
-          for (var i = 0; i < collection.length; i++){
-            callback(collection[i], i, collection);
-          }
-        }else{
-          for (var key in collection){
-            callback(collection[key], key, collection);
-          }
-        }
-       }
+       
       });
 
       it('should be a function', function() {
@@ -264,15 +248,7 @@
 
     describe('filter', function() {
       checkForNativeMethods(function() {
-        _.filter = function(collection, callback){
-          var newArray = [];
-          for (var i = 0; i < collection.length; i++){
-            if (callback(collection[i])){
-              newArray.push(collection[i]);
-            }
-          }
-          return newArray;
-        }
+        
       });
 
       it('should return all even numbers in an array', function() {
@@ -300,15 +276,7 @@
 
     describe('reject', function() {
       checkForNativeMethods(function() {
-        _.reject = function(collection, callback){
-          var newArray = [];
-          for (var i = 0; i < collection.length; i++){
-            if (!callback(collection[i])){
-              newArray.push(collection[i]);
-            }
-          }
-          return newArray;
-        }
+        
       });
 
       it('should reject all even numbers', function() {
@@ -336,21 +304,7 @@
 
     describe('uniq', function() {
       checkForNativeMethods(function(){
-        _.uniq = function(collection, callback){
-          if (typeof callback !== "function"){
-            callback = _.identity;
-          }
-          var result = [];
-          var obj = {};
-          for (var i = 0; i < collection.length; i++){
-            var item = collection[i];
-            if (!obj[callback(item)]){
-              obj[callback(item)] = item;
-              result.push(item);
-            }
-          }
-          return result;
-        }
+        
       });
 
       it('should not mutate the input array', function() {
@@ -406,13 +360,7 @@
 
     describe('map', function() {
       checkForNativeMethods(function() {
-        _.map = function(collection, callback){
-          var newArray = [];
-          _.each(collection, function(item, index, array){
-            newArray.push(callback(item, index, array));
-          });
-          return newArray;
-        }
+        
       });
 
       it('should not mutate the input array', function() {
@@ -496,16 +444,7 @@
 
     describe('reduce', function() {
       checkForNativeMethods(function() {
-        _.reduce = function(collection, callback, accumulator){
-          _.each(collection, function(item, index){
-            if (index === 0 && accumulator === undefined){
-              accumulator = item;
-            }else{
-              accumulator = callback(accumulator, item);
-            }
-          });
-          return accumulator;
-        }
+        
       });
 
       it('should be a function', function() {

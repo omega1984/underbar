@@ -73,18 +73,7 @@
       };
 
       checkForNativeMethods(function() {
-        _.every = function(collection, callback){
-          if (callback === undefined){
-            callback = _.identity;
-          }
-          var result = true;
-          _.each(collection, function(item){
-            if (!callback(item)){
-              result = false;
-            }
-          });
-          return result;
-        }
+        
       });
 
       it('passes by default for an empty collection', function() {
@@ -131,18 +120,7 @@
       };
 
       checkForNativeMethods(function() {
-        _.some = function(collection, callback){
-          if (callback === undefined){
-            callback = _.identity;
-          }
-          var result = false;
-          _.each(collection, function(item){
-            if (callback(item)){
-              result = true;
-            }
-          });
-          return result;
-        }
+        
       });
 
       it('should fail by default for an empty collection', function() {
@@ -187,15 +165,7 @@
 
     describe('extend', function() {
       checkForNativeMethods(function() {
-        _.extend = function(object){
-          var sourceArray = [].slice.call(arguments, 1);
-          _.each(sourceArray, function(obj){
-            for(var key in obj){
-              object[key] = obj[key];
-            }
-          });
-          return object;
-        }
+        
       });
 
       it('returns the first argument', function() {
@@ -245,17 +215,7 @@
 
     describe('defaults', function() {
       checkForNativeMethods(function() {
-        _.defaults = function(object){
-          var sourceArray = [].slice.call(arguments, 1);
-          _.each(sourceArray, function(obj){
-            for (var key in obj){
-              if (object[key] === undefined){
-                object[key] = obj[key];
-              }
-            }
-          });
-          return object;
-        }
+        
       });
 
       it('should be a function', function() {
@@ -452,16 +412,7 @@
       });
 
       checkForNativeMethods(function() {
-        _.memoize = function(callback) {
-          var checkup = {};
-          return function () {
-            var key = JSON.stringify(arguments);  // this arguments is the arguments passed in callback function
-            if (checkup[key] === undefined){
-              checkup[key] = callback.apply(this, arguments);  // arguments is an array
-            }
-            return checkup[key];
-          };
-        };
+        
       });
 
       it('should produce the same result as the non-memoized version', function() {
@@ -519,12 +470,7 @@
       })
 
       checkForNativeMethods(function() {
-        _.delay = function(callback, time){
-          var args = [].slice.call(arguments, 2); //arguments is an array of arguments
-          setTimeout(function(){
-            callback.apply(this, args);
-          }, time);
-        }
+        
       })
 
       it('should only execute the function after the specified wait time', function() {
@@ -548,14 +494,7 @@
 
     describe('shuffle', function() {
       checkForNativeMethods(function() {
-        _.shuffle = function(collection){
-          var array = collection.slice(0);
-          for (var i = 0; i < array.length; i++){
-            var randomIndex = Math.floor(Math.random()*array.length);
-            [array[i], array[randomIndex]] = [array[randomIndex], array[i]];
-          }
-          return array
-        }
+        
       })
 
       it('should not modify the original object', function() {

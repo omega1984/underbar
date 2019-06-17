@@ -423,6 +423,30 @@
   // Takes an arbitrary number of arrays and produces an array that contains
   // every item shared between all the passed-in arrays.
   _.intersection = function() {
+  // _.intersection = function(){
+  //   var args = [...arguments];
+  //   var maxLen = args.sort((a, b) => b.length - a.length)[0].length;
+  //   var holder = {};
+  //   var result = [];
+  //   for (var i = 0; i < args.length; i++){
+  //     for (var j = 0; j < maxLen; j++){
+  //       if (args[i][j] !== undefined){
+  //         if(holder[args[i][j]]){
+  //           holder[args[i][j]] += 1;
+  //         }else{
+  //           holder[args[i][j]] = 1;
+  //         }
+  //       }
+  //     }
+  //   }
+  //   for (var key in holder){
+  //     if (holder[key] >= args.length){
+  //       result.push(key);
+  //     }
+  //   }
+  //   return result;
+  // }
+  // better version that works for all cases
     var list = [...arguments];
     return list.reduce(function(a, b) {
       return compare(a, b);
