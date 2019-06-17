@@ -580,7 +580,8 @@
             return item + 1;
           }
         };
-
+        // [1, 1, 2] -- first(1) return undefined
+        // second(1) return 1+1, and third(2) return 2+1 === 3!!!!
         var total = _.reduce([1,1,2], returnFalsy);
         expect(total).to.equal(3);
       });

@@ -160,25 +160,44 @@
 
     describe('intersection', function() {
       checkForNativeMethods(function() {
-        _.intersection = function(){
-          var args = [...arguments];
-          var maxLen = args.sort((a, b) => b.length - a.length)[0].length;
-          var holder = {};
+        // _.intersection = function(){
+        //   var args = [...arguments];
+        //   var maxLen = args.sort((a, b) => b.length - a.length)[0].length;
+        //   var holder = {};
+        //   var result = [];
+        //   for (var i = 0; i < args.length; i++){
+        //     for (var j = 0; j < maxLen; j++){
+        //       if (args[i][j] !== undefined){
+        //         if(holder[args[i][j]]){
+        //           holder[args[i][j]] += 1;
+        //         }else{
+        //           holder[args[i][j]] = 1;
+        //         }
+        //       }
+        //     }
+        //   }
+        //   for (var key in holder){
+        //     if (holder[key] >= args.length){
+        //       result.push(key);
+        //     }
+        //   }
+        //   return result;
+        // }
+        // better version that works for all cases
+        _.intersection = function() {
+          var list = [...arguments];
+          return list.reduce(function(a, b) {
+            return compare(a, b);
+          });
+        }
+        function compare(array1, array2) {
           var result = [];
-          for (var i = 0; i < args.length; i++){
-            for (var j = 0; j < maxLen; j++){
-              if (args[i][j] !== undefined){
-                if(holder[args[i][j]]){
-                  holder[args[i][j]] += 1;
-                }else{
-                  holder[args[i][j]] = 1;
-                }
+          for (var i = 0; i < array1.length; i++) {
+            for (var j = 0; j < array2.length; j++) {
+              if (array2[j] === array1[i]){
+                result.push(array2[j]);
+                array2.splice(j, 1);
               }
-            }
-          }
-          for (var key in holder){
-            if (holder[key] > 1){
-              result.push(key);
             }
           }
           return result;

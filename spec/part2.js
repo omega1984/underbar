@@ -455,9 +455,9 @@
         _.memoize = function(callback) {
           var checkup = {};
           return function () {
-            var key = JSON.stringify(arguments);
+            var key = JSON.stringify(arguments);  // this arguments is the arguments passed in callback function
             if (checkup[key] === undefined){
-              checkup[key] = callback.apply(callback, arguments);  // arguments is an array
+              checkup[key] = callback.apply(this, arguments);  // arguments is an array
             }
             return checkup[key];
           };
@@ -522,7 +522,7 @@
         _.delay = function(callback, time){
           var args = [].slice.call(arguments, 2); //arguments is an array of arguments
           setTimeout(function(){
-            callback.apply(callback, args);
+            callback.apply(this, args);
           }, time);
         }
       })
